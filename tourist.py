@@ -97,12 +97,22 @@ def pathInWeightedGraph(graph, start, end, constraint=None, tourist=False):
     # TODO Run this check at insertion and only store one destination so we don't waste memory
     # This is really obnoxious right now...
     if tourist:
+        best_unique, best_path = 0, 0
         for destination in destinations:
+            
+            flat_path = []
             path = destination.path[:]
             while len(path) > 0:
                 flat_path.insert(0, path.pop(-1))
                 path = path[0][:]
-        
+            flat_path += [destination.coord]
+
+            unique_destinations = len(set(flat_path))
+            if unique_destinations > best_unique:
+                best_unique, best_path = unique_destinations, flat_path
+            
+        return best_path
+    destination = destinations[0]
     path = destination.path
     flat_path = []
     

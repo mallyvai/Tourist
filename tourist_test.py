@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-import unittest
-import pprint
+import unittest, pprint, random
 from collections import defaultdict
 
 
@@ -35,6 +34,7 @@ class GraphTester(unittest.TestCase):
 
     def setUp(self):
         self.longMessage = True
+        random.seed(1)
 
 class TestWeightedShortestPath(GraphTester):
 
@@ -102,10 +102,6 @@ class TestWeightedShortestPath(GraphTester):
             )
         )
     
-    def testStartAndEndInDisconnectedComponentsReturnsException(self):
-        """UNIMPLEMENTED """
-        pass 
-    
     def testRandomGraphsReturnsOptimalPaths(self):
         '''UNIMPLEMENTED Generates many random graphs ; tests them all to make sure the optimals are returned '''
         pass
@@ -118,7 +114,7 @@ class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
 
         pass
 
-    def testSecondNodeStartInLineGraphReturnsAllNodes(self):
+    def testSecondNodeStartInUnbalancedLineGraphWithConstraintReturnsAllNodes(self):
         ''' A line graph with the tourist starting at the 2nd point should return the whole line.
 
         Suppose we have
@@ -140,9 +136,19 @@ class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
             Coord(3,3)
         ]
 
-        pass
- 
+        actual_path = tourist.pathInWeightedGraph(self.unbalanced_line_graph, start_coord, end_coord, constraint=8, tourist=True)
 
+        self.assertEqual(
+            actual_path,
+            desired_path
+        )
+
+        pass
+
+#TODO: Implement the load_tests protocol
 if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWeightedShortestPath)
+    unittest.TextTestRunner(verbosity=2, descriptions=True).run(suite)
+
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestConstrainedRepeatingWeightedShortestPath)
     unittest.TextTestRunner(verbosity=2, descriptions=True).run(suite)
