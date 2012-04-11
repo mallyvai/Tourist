@@ -60,34 +60,34 @@ class TestWeightedShortestPath(TestShortestPaths):
 
     def testTrivialGraphReturnsOnlyEdge(self):
         '''A graph with just two edges should return exactly the first edge as being in the path between the nodes. '''
-        start_coord = Coord(0,0)
-        end_coord = Coord(1,1)
+        start = Coord(0,0)
+        end = Coord(1,1)
 
-        start_weighted_end_of_edge = WeightedEndOfEdge(10, end_coord)
-        end_weighted_end_of_edge = WeightedEndOfEdge(10, start_coord)
+        start_weighted_end_of_edge = WeightedEndOfEdge(10, end)
+        end_weighted_end_of_edge = WeightedEndOfEdge(10, start)
 
         trivial_graph = {
-            start_coord : [start_weighted_end_of_edge],
-            end_coord: [end_weighted_end_of_edge]
+            start : [start_weighted_end_of_edge],
+            end: [end_weighted_end_of_edge]
         }
     
-        desired_path = [start_coord, end_coord]
+        desired_path = [start, end]
 
-        actual_path = tourist.pathInWeightedGraph(self.trivial_graph, start_coord, end_coord)
+        actual_path = tourist.pathInWeightedGraph(self.trivial_graph, start, end)
         
 
         self.assertEqual(
             actual_path,
             desired_path,
-            "start: " + str(start_coord) + ", end: " + str(end_coord) + "\n"+pp.pformat(actual_path) + "\n" + pp.pformat(desired_path)
+            "start: " + str(start) + ", end: " + str(end) + "\n"+pp.pformat(actual_path) + "\n" + pp.pformat(desired_path)
         )
 
     
     def testLineGraphReturnsLinePath(self):
         '''A degenerate list-graph should return the the whole list if the start and end nodes are the head and tail of the list. '''
         
-        start_coord = Coord(0,0)
-        end_coord = Coord(4,4)
+        start = Coord(0,0)
+        end = Coord(4,4)
 
         desired_path = [
             Coord(0,0),
@@ -98,12 +98,12 @@ class TestWeightedShortestPath(TestShortestPaths):
         ]
 
 
-        actual_path = tourist.pathInWeightedGraph(self.increasing_line_graph, start_coord, end_coord)
+        actual_path = tourist.pathInWeightedGraph(self.increasing_line_graph, start, end)
 
         self.assertEqual(
             actual_path,
             desired_path,
-            "start: " + str(start_coord) + ", end: " + str(end_coord) + "\n"+pp.pformat(actual_path) + "\n" + pp.pformat(desired_path)
+            "start: " + str(start) + ", end: " + str(end) + "\n"+pp.pformat(actual_path) + "\n" + pp.pformat(desired_path)
         )
         
 
@@ -145,8 +145,8 @@ class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
 
         We should go [ B, A, B, C, D ] for a total cost of 8.
         '''
-        start_coord = Coord(1,1)
-        end_coord = Coord(3,3)
+        start = Coord(1,1)
+        end = Coord(3,3)
 
         desired_path = [
             Coord(1,1),
@@ -156,14 +156,14 @@ class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
             Coord(3,3)
         ]
 
-        actual_path = tourist.pathInWeightedGraph(self.unbalanced_line_graph, start_coord, end_coord, constraint=8, tourist=True)
+        actual_path = tourist.pathInWeightedGraph(self.unbalanced_line_graph, start, end, constraint=8, tourist=True)
 
         self.assertEqual(
             actual_path,
             desired_path
         )
 
-    def testDistantNodeStartInMeshHubGraphWithConstraintReturnsStarPath(self):
+    def testDistantToHubInMeshHubGraphWithConstraintReturnsStarPath(self):
 
         start, end, constraint = Coord(1,1), Coord(0,0), 5
         
