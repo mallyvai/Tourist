@@ -8,10 +8,6 @@ from shared_objects import Coord, WeightedEndOfEdge
 
 class TestShortestPaths(unittest.TestCase):
    
-    # Very ghetto (or pythonic?) way to essentially dicard 'self' so we can
-    # make calls like self.findPath.
-    # But TestShortestPaths.findPath won't work!
-    findPath = lambda self, *args, **kargs: tourist.pathInWeightedGraph(*args, **kargs)
 
     trivial_graph = {
         Coord(0,0): [WeightedEndOfEdge(1, Coord(1,1))],
@@ -53,8 +49,43 @@ class TestShortestPaths(unittest.TestCase):
     }
 
 
+    @classmethod
+    def findPath(cls, *args, **kargs):
+        ''' Facade function for tourist pathfinding function. '''
+        return tourist.pathInWeightedGraph(*args, **kargs)
+
+    ## Next two functions are unused, but could be used somewhere after twiddling.
+    ''' 
+    Verifies that dijkstra's returns a reversed path if the start and end are reversed.
+    We're exploiting the convention that all tests should accept (graph, start, end).
+    Of course, since this property only holds if the graph is (effectively) undirected,
+    we need to verify that the graph is undirected as well.
+    '''
+
+    def verifyIsUndirectedGraph(func):
+        '''
+        Verifies that the graph in the argument is effectively undirected.
+        Currently an unused decorator... TODO: Use this somewhere!
+        '''
+        def verifier(graph, start, end):
+            for node, weighted_ends_of_edges in graph.items():
+                for weighted_end_of_edge in weighted_ends_of_edges:
+                    weight, coord = weighted_end_of_edge
+                    reverse = shared_objects.WeightedEndOfEdge(weight, node)
+                    unittest.assertIn(reverse, graph[coord])
+            return func(graph, start, end)
+        return verifier
+
+    def verifyReturnsSymmetricResults(test_func):
+        def verifier(graph, start, end):
+            forward = test_func(graph, start, end)
+            reverse = test_func(graph, end, start)
+            unittest.assertEqual(forward, reverse[::-1])
+            return func(graph, start, end)
+        return verifier
+
+
     def setUp(self):
         self.longMessage = True
         random.seed(1)
-
     
