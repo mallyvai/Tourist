@@ -10,7 +10,7 @@ from shared_objects import Coord, WeightedEndOfEdge
 pp = pprint.PrettyPrinter()
 
 
-class GraphTester(unittest.TestCase):
+class TestShortestPaths(unittest.TestCase):
 
     trivial_graph = {
         Coord(0,0): [WeightedEndOfEdge(1, Coord(1,1))],
@@ -32,11 +32,31 @@ class GraphTester(unittest.TestCase):
         Coord(3,3): [WeightedEndOfEdge(1, Coord(2,2))]
     }
 
+
+    mesh_with_hub_graph = {
+        Coord(0,0): [   WeightedEndOfEdge(1, Coord(1,1)),
+                        WeightedEndOfEdge(1, Coord(2,2)), 
+                        WeightedEndOfEdge(1, Coord(3,3))],
+
+        Coord(1,1): [   WeightedEndOfEdge(1, Coord(0,0)), 
+                        WeightedEndOfEdge(4, Coord(2,2)),
+                        WeightedEndOfEdge(4, Coord(3,3))],
+
+        Coord(2,2): [   WeightedEndOfEdge(1, Coord(0,0)),
+                        WeightedEndOfEdge(4, Coord(1,1)),
+                        WeightedEndOfEdge(4, Coord(3,3))],
+
+        Coord(3,3): [   WeightedEndOfEdge(1, Coord(0,0)),
+                        WeightedEndOfEdge(4, Coord(1,1)),
+                        WeightedEndOfEdge(4, Coord(2,2))],
+    }
+
+
     def setUp(self):
         self.longMessage = True
         random.seed(1)
 
-class TestWeightedShortestPath(GraphTester):
+class TestWeightedShortestPath(TestShortestPaths):
 
     def testTrivialGraphReturnsOnlyEdge(self):
         '''A graph with just two edges should return exactly the first edge as being in the path between the nodes. '''
@@ -143,7 +163,18 @@ class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
             desired_path
         )
 
-        pass
+    def testDistantNodeStartInMeshHubGraphWithConstraintReturnsStarPath(self):
+
+        start, end, constraint = Coord(1,1), Coord(0,0), 5
+        
+        desired_path = [Coord(1,1), Coord(0,0), Coord(2,2), Coord(0,0), Coord(3,3), Coord(0,0)]
+        
+        actual_path = tourist.pathInWeightedGraph(self.mesh_with_hub_graph, start, end, constraint=constraint, tourist=True )
+
+        self.assertEqual(
+            actual_path,
+            desired_path
+        )
 
 #TODO: Implement the load_tests protocol
 if __name__ == "__main__":
