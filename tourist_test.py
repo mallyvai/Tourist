@@ -127,14 +127,9 @@ class TestWeightedShortestPath(TestShortestPaths):
         pass
 
     
-class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
+class TestConstrainedTouristWeightedShortestPath(TestWeightedShortestPath):
 
-    def _simpleTouristAlgorithm(self):
-        ''' Brute-force algorithm to check the more complicated Dijkstra's-based variant. '''
-
-        pass
-
-    def testSecondNodeStartInUnbalancedLineGraphWithConstraintReturnsAllNodes(self):
+    def testSecondNodeStartInUnbalancedLineGraphReturnsAllNodes(self):
         ''' A line graph with the tourist starting at the 2nd point should return the whole line.
 
         Suppose we have
@@ -163,14 +158,31 @@ class TestConstrainedRepeatingWeightedShortestPath(TestWeightedShortestPath):
             desired_path
         )
 
-    def testDistantToHubInMeshHubGraphWithConstraintReturnsStarPath(self):
+    def testDistantToHubInMeshHubGraphReturnsStarPath(self):
+        ''' A complete graph with a cheap "hub" should always go through the hub. Here we start at (1,1) and end at the hub (0,0).
 
-        start, end, constraint = Coord(1,1), Coord(0,0), 5
+        We have 4 coordinates, with (0,0) being the hub node. Each node is connected to the
+        other nodes via an edge of weight 4, with the exception of the hub node, which is
+        connected via an edge of weight 1.
+        '''
         
+        start, end, constraint = Coord(1,1), Coord(0,0), 5
         desired_path = [Coord(1,1), Coord(0,0), Coord(2,2), Coord(0,0), Coord(3,3), Coord(0,0)]
         
         actual_path = tourist.pathInWeightedGraph(self.mesh_with_hub_graph, start, end, constraint=constraint, tourist=True )
 
+        self.assertEqual(
+            actual_path,
+            desired_path
+        )
+
+    def testHubToHubInMeshHubGraphReturnsStarPathButIgnoresLast(self):
+        '''A complete graph with a cheap "hub" should always go through the hub. Here we start and end at the hub, but don't give enough constraint to go to the final node.'''
+        start, end, constraint = Coord(0,0), Coord(0,0), 4
+        desired_path = [Coord(0,0), Coord(1,1), Coord(0,0), Coord(2,2), Coord(0,0)]
+
+        actual_path = tourist.pathInWeightedGraph(self.mesh_with_hub_graph, start, end, constraint=constraint, tourist=True)
+        
         self.assertEqual(
             actual_path,
             desired_path
@@ -181,5 +193,5 @@ if __name__ == "__main__":
     suite = unittest.TestLoader().loadTestsFromTestCase(TestWeightedShortestPath)
     unittest.TextTestRunner(verbosity=2, descriptions=True).run(suite)
 
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestConstrainedRepeatingWeightedShortestPath)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestConstrainedTouristWeightedShortestPath)
     unittest.TextTestRunner(verbosity=2, descriptions=True).run(suite)
