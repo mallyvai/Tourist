@@ -17,5 +17,5 @@ class TestLazyGraph(TestShortestPaths):
         actual = self.gridonly_lazy_graph[coord]
         self.assertEqual(
             set(desired),
-            coord)
+            set(actual))
 
