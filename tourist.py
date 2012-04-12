@@ -61,7 +61,6 @@ def pathInWeightedGraph(graph, start, end, constraint=None, tourist=False):
     visited = set()
     heap = [DNode(0, start, [])]
     
-    #TODO: Add constraint s.t. execution aborts if weights exceed constraint
     destinations = []
     while len(heap) > 0:
         current = heapq.heappop(heap)
@@ -102,6 +101,9 @@ def pathInWeightedGraph(graph, start, end, constraint=None, tourist=False):
             
             flat_path = []
             path = destination.path[:]
+
+            #TODO this flattening algorithm is used in two places ; should be a helper function.
+
             while len(path) > 0:
                 flat_path.insert(0, path.pop(-1))
                 path = path[0][:]

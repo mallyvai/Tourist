@@ -5,7 +5,9 @@ import unittest, random
 
 import tourist
 from shared_objects import Coord, WeightedEndOfEdge
-
+#TODO: Rename to TestGraphOperations
+# Because this is used by several
+# different things.
 class TestShortestPaths(unittest.TestCase):
    
 
@@ -64,6 +66,7 @@ class TestShortestPaths(unittest.TestCase):
 
     def verifyIsUndirectedGraph(func):
         '''
+        UNUSED
         Verifies that the graph in the argument is effectively undirected.
         Currently an unused decorator... TODO: Use this somewhere!
         '''
@@ -77,6 +80,8 @@ class TestShortestPaths(unittest.TestCase):
         return verifier
 
     def verifyReturnsSymmetricResults(test_func):
+        ''' UNUSED
+        '''
         def verifier(graph, start, end):
             forward = test_func(graph, start, end)
             reverse = test_func(graph, end, start)
@@ -85,7 +90,10 @@ class TestShortestPaths(unittest.TestCase):
         return verifier
 
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(self):
         self.longMessage = True
+    
+    def setUp(self):
         random.seed(1)
     
