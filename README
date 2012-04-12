@@ -35,4 +35,9 @@ DOES NOT HAVE:
 DOES HAVE:
     The actual greedy tourist algorithm which reduces the original grid to the distances between Tourist nodes.
     The LazyGraph data structure (mostly) verified and working.
+
+TO USE:
+    Make sure you have Python3 installed.
+
+    Call the tourist() function yourself! If you want an "Engineer's Proof" of correctness look at the test cases. You can run them yourself by executing the simple tests script ./run_tests
     

@@ -1,37 +1,3 @@
-"""
-1) You have some number of hours 
-2) You have some number of "interesting destinations" you would (like? need?) to visit
-3) 
-
-> Map of US is an (n * n) grid
-> List of interesting places [(x_0,y_0,name_0),(x_1, y_1, name_1)...]
-> Can only move North, South, East, West (no diagonals) -> 
-> List of weights [(x_0, y_0, x_1, y_1, weight_0)] 
-> Given:
->   x_start, y
-> 
-
-
-> TSP variant
->   Undirected weighted graph
-> Unbreakable constraint - finite amount of time
-> "looser" constraint
-> 1) Maximize number of intermediate nodes
-> 2) Make sure that we don't exceed some net travel time
-
-
-
-
-http://en.wikipedia.org/wiki/Traveling_purchaser_problem -> Not the same problem
-http://en.wikipedia.org/wiki/Travelling_salesman_problem
-
-
-We want to go from some GlobalStart to some GlobalEnd
-Some number of "interesting" nodes
-Run dijkstras between all interesting nodes (??)
-The start and end are also interesting nodes , but we should run dijkstra's starting from GlobalStart
-"""
-
 import heapq
 from shared_objects import Coord, WeightedEndOfEdge, DNode
 
